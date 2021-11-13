@@ -1,0 +1,8 @@
+Note: The expression in triplet braces {{{...}}} will be output without HTML escaping.
+
+--- context ---
+name: cargo metadata --format-version=1 --no-deps | jq -r .packages[0].name
+author: cargo metadata --format-version=1 --no-deps | jq -r .packages[0].authors[0]
+
+--- template ---
+{{{name}}} by {{{author}}}

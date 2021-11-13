@@ -1,0 +1,12 @@
+hello.hms
+
+Any text before the context or template block is just a comment.
+It will not be output.
+
+--- context ---
+greeting: echo 'hello, world'
+chars: |
+  echo -n 'hello, world' | wc --chars
+
+--- template ---
+{{greeting}} (length: {{chars}})
