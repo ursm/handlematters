@@ -19,7 +19,7 @@ impl Source {
                 error while parsing context as YAML
 
                 --- context ---
-                {}", context
+                {}", super::chomp(&context)
             }
         })?;
 

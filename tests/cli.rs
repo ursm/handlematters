@@ -90,7 +90,7 @@ fn script_nonzero() -> Result<()> {
     "});
 
     cmd.assert().failure().stderr(indoc! {"
-        Error: process exited unsuccessfully: exit status: 42
+        Error: failed to execute script
 
         ---- script ----
         echo world
@@ -103,6 +103,8 @@ fn script_nonzero() -> Result<()> {
         ---- stderr ----
         foo
 
+        Caused by:
+            process exited unsuccessfully: exit status: 42
     "});
 
     Ok(())
@@ -123,7 +125,7 @@ fn script_killed() -> Result<()> {
     "});
 
     cmd.assert().failure().stderr(indoc! {"
-        Error: process exited unsuccessfully: signal: 15
+        Error: failed to execute script
 
         ---- script ----
         echo world
@@ -136,6 +138,8 @@ fn script_killed() -> Result<()> {
         ---- stderr ----
         foo
 
+        Caused by:
+            process exited unsuccessfully: signal: 15
     "});
 
     Ok(())
@@ -194,7 +198,6 @@ fn invalid_yaml() -> Result<()> {
 
         --- context ---
         &
-
 
         Caused by:
             0: while scanning an anchor or alias, did not find expected alphabetic or numeric character at line 1 column 1

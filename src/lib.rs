@@ -7,7 +7,7 @@ use std::{
     process::{Command, Stdio},
 };
 
-use anyhow::{anyhow, Result};
+use anyhow::{Context as _, Result};
 use handlebars::{Context, Handlebars, RenderContext, Renderable};
 use indoc::formatdoc;
 use serde_yaml::{Mapping, Sequence, Value};
@@ -61,21 +61,26 @@ fn run_script(script: &str) -> Result<(String, String)> {
 
     let [stdout, stderr] = [output.stdout, output.stderr].map(|io| String::from_utf8_lossy(&io).to_string());
 
-    match output.status.exit_ok() {
-        Ok(_) => {
-            let stdout = stdout.strip_suffix('\n').unwrap_or(&stdout).to_string();
+    output.status.exit_ok().with_context(|| {
+        formatdoc! {"
+            failed to execute script
 
-            Ok((stdout, stderr))
+            ---- script ----
+            {}
+
+            ---- stdout ----
+            {}
+
+            ---- stderr ----
+            {}", chomp(script), chomp(&stdout), chomp(&stderr)
         }
-        Err(e) => Err(anyhow!(formatdoc! {"
-                {}
+    })?;
 
-                ---- script ----
-                {}
-                ---- stdout ----
-                {}
-                ---- stderr ----
-                {}", e, script, stdout, stderr
-        })),
-    }
+    let stdout = chomp(&stdout).to_string();
+
+    Ok((stdout, stderr))
+}
+
+fn chomp(s: &str) -> &str {
+    s.strip_suffix('\n').unwrap_or(s)
 }
