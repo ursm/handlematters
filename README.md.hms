@@ -6,6 +6,8 @@ example:
   hello:
     src: cat examples/hello.hms
     out: cargo run --quiet -- examples/hello.hms
+    context: cat examples/hello/context
+    template: cat examples/hello/template
   cargo:
     src: cat examples/cargo.hms
     out: cargo run --quiet -- examples/cargo.hms
@@ -35,17 +37,13 @@ $ handlematters hello.hms
 Let's take a closer look.
 
 ```
---- context ---
-greeting: echo 'hello, world'
-length: |
-  echo -n 'hello, world' | wc --chars
+{{{example.hello.context}}}
 ```
 
 The `context` block is a YAML document. Each value of the property will be executed as a shell script and the output will be the resulting value.
 
 ```
---- template ---
-\{{greeting}} (length: \{{length}})
+{{{example.hello.template}}}
 ```
 
 The `template` block is a Handlebars template. `\{{...}}` to output the context value. If you are not familiar with Handlebars syntax, have a look at https://handlebarsjs.com/.

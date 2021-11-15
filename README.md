@@ -16,11 +16,11 @@ It will not be output.
 
 --- context ---
 greeting: echo 'hello, world'
-chars: |
+count: |
   echo -n 'hello, world' | wc --chars
 
 --- template ---
-{{greeting}} (length: {{chars}})
+{{greeting}} (length: {{count}})
 ```
 
 Passing this file to handlematters will result in the following output:
@@ -35,7 +35,7 @@ Let's take a closer look.
 ```
 --- context ---
 greeting: echo 'hello, world'
-length: |
+count: |
   echo -n 'hello, world' | wc --chars
 ```
 
@@ -43,7 +43,7 @@ The `context` block is a YAML document. Each value of the property will be execu
 
 ```
 --- template ---
-{{greeting}} (length: {{length}})
+{{greeting}} (length: {{count}})
 ```
 
 The `template` block is a Handlebars template. `{{...}}` to output the context value. If you are not familiar with Handlebars syntax, have a look at https://handlebarsjs.com/.

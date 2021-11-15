@@ -1,0 +1,13 @@
+--- context ---
+context: cat examples/hello/context
+template: cat examples/hello/template
+
+--- template ---
+hello.hms
+
+Any text before the context or template block is just a comment.
+It will not be output.
+
+{{{context}}}
+
+{{{template}}}

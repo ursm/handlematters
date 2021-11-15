@@ -1,0 +1,4 @@
+--- context ---
+greeting: echo 'hello, world'
+count: |
+  echo -n 'hello, world' | wc --chars

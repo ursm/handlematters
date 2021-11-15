@@ -5,8 +5,8 @@ It will not be output.
 
 --- context ---
 greeting: echo 'hello, world'
-chars: |
+count: |
   echo -n 'hello, world' | wc --chars
 
 --- template ---
-{{greeting}} (length: {{chars}})
+{{greeting}} (length: {{count}})
