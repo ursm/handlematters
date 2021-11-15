@@ -31,7 +31,7 @@ fn evaluate_context(ctx: Value, on_stderr: fn(&str)) -> Result<Value> {
                 on_stderr(&err);
             }
 
-            Ok(Value::String(out))
+            Ok(Value::String(chomp(&out).to_string()))
         }
         Value::Sequence(seq) => {
             let seq: Sequence = seq.into_iter().map(|v| evaluate_context(v, on_stderr)).collect::<Result<_>>()?;
@@ -75,8 +75,6 @@ fn run_script(script: &str) -> Result<(String, String)> {
             {}", chomp(script), chomp(&stdout), chomp(&stderr)
         }
     })?;
-
-    let stdout = chomp(&stdout).to_string();
 
     Ok((stdout, stderr))
 }
