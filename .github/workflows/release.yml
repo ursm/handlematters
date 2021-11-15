@@ -9,16 +9,22 @@ jobs:
         include:
           - runs-on: ubuntu-latest
             target: x86_64-unknown-linux-gnu
+            label: linux-x86_64
           - runs-on: ubuntu-latest
             target: i686-unknown-linux-gnu
+            label: linux-x86
           - runs-on: ubuntu-latest
             target: aarch64-unknown-linux-gnu
+            label: linux-aarch64
           - runs-on: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
+            label: linux-armv7-eabihf
           - runs-on: macos-11
             target: x86_64-apple-darwin
+            label: macos-x86_64
           - runs-on: macos-11
             target: aarch64-apple-darwin
+            label: macos-aarch64
 
     runs-on: ${{ matrix.runs-on }}
 
@@ -32,7 +38,7 @@ jobs:
           args: --release --target ${{ matrix.target }}
           use-cross: true
 
-      - run: echo "TARBALL=handlematters-${{ github.event.release.tag_name }}-${{ matrix.target }}.tar.xz" >> $GITHUB_ENV
+      - run: echo "TARBALL=handlematters-${{ github.event.release.tag_name }}-${{ matrix.label }}.tar.xz" >> $GITHUB_ENV
       - run: tar caf $TARBALL --directory=target/${{ matrix.target }}/release handlematters
 
       - uses: softprops/action-gh-release@v1
