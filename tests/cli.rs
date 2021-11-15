@@ -37,6 +37,22 @@ fn from_stdin() -> Result<()> {
 }
 
 #[test]
+fn from_stdin_2() -> Result<()> {
+    let mut cmd = Command::cargo_bin("handlematters")?;
+
+    cmd.arg("-").write_stdin(indoc! {"
+        --- context ---
+        x: echo 42
+        --- template ---
+        x = {{x}}
+    "});
+
+    cmd.assert().stdout("x = 42\n");
+
+    Ok(())
+}
+
+#[test]
 fn from_file() -> Result<()> {
     let mut file = NamedTempFile::new()?;
 

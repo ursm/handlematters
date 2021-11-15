@@ -20,20 +20,18 @@ fn main() -> Result<()> {
 
     let mut reader: Box<dyn Read> = match opts.file {
         Some(path) => {
-            let file = File::open(path.clone()).with_context(|| format!("failed to open file: {}", path.clone().to_string_lossy()))?;
+            let path_str = path.to_string_lossy();
 
-            Box::new(file)
+            if path_str == "-" {
+                Box::new(io::stdin())
+            } else {
+                Box::new(File::open(path.clone()).with_context(|| format!("failed to open file: {}", path_str))?)
+            }
         }
         None => Box::new(io::stdin()),
     };
 
-    let mut src = String::new();
-
-    reader.read_to_string(&mut src)?;
-
-    let output = handlematters::render(&src, |stderr| eprint!("{}", stderr))?;
-
-    print!("{}", output);
+    handlematters::run(&mut reader)?;
 
     Ok(())
 }

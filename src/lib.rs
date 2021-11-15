@@ -1,82 +1,63 @@
 #![feature(exit_status_error)]
 
-mod source;
+mod evaluate_context;
+mod extract_blocks;
 
-use std::{
-    io::Write,
-    process::{Command, Stdio},
-};
+use std::io::{self, BufWriter, Read};
 
 use anyhow::{Context as _, Result};
-use handlebars::{Context, Handlebars, RenderContext, Renderable};
-use indoc::formatdoc;
-use serde_yaml::{Mapping, Sequence, Value};
-use source::Source;
+use handlebars::{Handlebars, Template};
+use indoc::{formatdoc, indoc};
+use serde_yaml::Value;
 
-pub fn render(src: &str, on_stderr: fn(&str)) -> Result<String> {
-    let src = Source::parse(src)?;
-    let ctx = evaluate_context(src.context, on_stderr)?;
+use evaluate_context::evaluate_context;
+use extract_blocks::extract_blocks;
 
-    let output = src.template.renders(&Handlebars::new(), &Context::wraps(ctx)?, &mut RenderContext::new(None))?;
+pub fn run<T: Read>(reader: &mut T) -> Result<()> {
+    let (ctx, tpl) = load_from(reader)?;
+    let ctx = evaluate_context(ctx)?;
+    let mut hbs = Handlebars::new();
 
-    Ok(output)
+    hbs.register_template("main", tpl);
+
+    let stdout = BufWriter::new(io::stdout());
+
+    hbs.render_to_write("main", &ctx, stdout)?;
+
+    Ok(())
 }
 
-fn evaluate_context(ctx: Value, on_stderr: fn(&str)) -> Result<Value> {
-    match ctx {
-        Value::String(s) => {
-            let (out, err) = run_script(&s)?;
+fn load_from<T: Read>(reader: &mut T) -> Result<(Value, Template)> {
+    let registry = extract_blocks(reader)?;
+    let null = "null".to_string();
+    let context = registry.context().unwrap_or(&null);
 
-            if !err.is_empty() {
-                on_stderr(&err);
-            }
-
-            Ok(Value::String(chomp(&out).to_string()))
-        }
-        Value::Sequence(seq) => {
-            let seq: Sequence = seq.into_iter().map(|v| evaluate_context(v, on_stderr)).collect::<Result<_>>()?;
-
-            Ok(Value::Sequence(seq))
-        }
-        Value::Mapping(map) => {
-            let map: Mapping = map.into_iter().map(|(k, v)| Ok((k, evaluate_context(v, on_stderr)?))).collect::<Result<_>>()?;
-
-            Ok(Value::Mapping(map))
-        }
-        v => Ok(v),
-    }
-}
-
-fn run_script(script: &str) -> Result<(String, String)> {
-    let mut shell = Command::new("sh")
-        .args(["-s", "-e"])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()?;
-
-    shell.stdin.as_mut().unwrap().write_all(script.as_bytes())?;
-
-    let output = shell.wait_with_output()?;
-
-    let [stdout, stderr] = [output.stdout, output.stderr].map(|io| String::from_utf8_lossy(&io).to_string());
-
-    output.status.exit_ok().with_context(|| {
+    let context = serde_yaml::from_str(context).with_context(|| {
         formatdoc! {"
-            failed to execute script
+            error while parsing context as YAML
 
-            ---- script ----
-            {}
-
-            ---- stdout ----
-            {}
-
-            ---- stderr ----
-            {}", chomp(script), chomp(&stdout), chomp(&stderr)
+            --- context ---
+            {}", chomp(context)
         }
     })?;
 
-    Ok((stdout, stderr))
+    let template = registry.template().with_context(|| {
+        indoc! {"
+            no template block found
+
+            Example:
+
+                --- context ---
+                to: echo world
+
+                --- template ---
+                hello, {{to}}"
+        }
+    })?;
+
+    let template = Template::compile(template)?;
+
+    Ok((context, template))
 }
 
 fn chomp(s: &str) -> &str {
