@@ -10,12 +10,12 @@ fn no_such_file() -> Result<()> {
     let mut cmd = Command::cargo_bin("handlematters")?;
 
     cmd.arg("/foo/bar");
-    cmd.assert().failure().stderr(indoc! {r#"
+    cmd.assert().failure().stderr(indoc! {"
         Error: failed to open file: /foo/bar
 
         Caused by:
             No such file or directory (os error 2)
-    "#});
+    "});
 
     Ok(())
 }
