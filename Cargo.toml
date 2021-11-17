@@ -11,7 +11,7 @@ license = "MIT"
 [dependencies]
 anyhow = "1.0.45"
 clap = "3.0.0-beta.5"
-handlebars = "4.1.4"
+handlebars = "4.1.5"
 indoc = "1.0.3"
 serde_yaml = "0.8.21"
 
