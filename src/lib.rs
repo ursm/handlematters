@@ -14,9 +14,13 @@ use evaluate_context::evaluate_context;
 use extract_blocks::extract_blocks;
 
 pub fn run<T: Read>(reader: &mut T) -> Result<()> {
-    let (ctx, tpl) = load_from(reader)?;
+    let registry = extract_blocks(reader)?;
+
+    let ctx = parse_context(registry.context())?;
     let ctx = evaluate_context(ctx)?;
+
     let mut hbs = Handlebars::new();
+    let tpl = parse_template(registry.template())?;
 
     hbs.register_template("main", tpl);
 
@@ -27,21 +31,23 @@ pub fn run<T: Read>(reader: &mut T) -> Result<()> {
     Ok(())
 }
 
-fn load_from<T: Read>(reader: &mut T) -> Result<(Value, Template)> {
-    let registry = extract_blocks(reader)?;
-    let null = "null".to_string();
-    let context = registry.context().unwrap_or(&null);
+fn parse_context(src: Option<&String>) -> Result<Value> {
+    if let Some(src) = src {
+        serde_yaml::from_str(src).with_context(|| {
+            formatdoc! {"
+                error while parsing context as YAML
 
-    let context = serde_yaml::from_str(context).with_context(|| {
-        formatdoc! {"
-            error while parsing context as YAML
+                --- context ---
+                {}", chomp(src)
+            }
+        })
+    } else {
+        Ok(Value::Null)
+    }
+}
 
-            --- context ---
-            {}", chomp(context)
-        }
-    })?;
-
-    let template = registry.template().with_context(|| {
+fn parse_template(src: Option<&String>) -> Result<Template> {
+    let src = src.with_context(|| {
         indoc! {"
             no template block found
 
@@ -55,9 +61,7 @@ fn load_from<T: Read>(reader: &mut T) -> Result<(Value, Template)> {
         }
     })?;
 
-    let template = Template::compile(template)?;
-
-    Ok((context, template))
+    Ok(Template::compile(src)?)
 }
 
 fn chomp(s: &str) -> &str {

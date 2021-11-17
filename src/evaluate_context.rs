@@ -4,9 +4,8 @@ use std::{
 };
 
 use anyhow::{Context as _, Result};
-
 use indoc::formatdoc;
-use serde_yaml::{Mapping, Sequence, Value};
+use serde_yaml::Value;
 
 use crate::chomp;
 
@@ -18,12 +17,12 @@ pub fn evaluate_context(ctx: Value) -> Result<Value> {
             Ok(Value::String(chomp(&output).to_string()))
         }
         Value::Sequence(seq) => {
-            let seq: Sequence = seq.into_iter().map(evaluate_context).collect::<Result<_>>()?;
+            let seq = seq.into_iter().map(evaluate_context).collect::<Result<_>>()?;
 
             Ok(Value::Sequence(seq))
         }
         Value::Mapping(map) => {
-            let map: Mapping = map.into_iter().map(|(k, v)| Ok((k, evaluate_context(v)?))).collect::<Result<_>>()?;
+            let map = map.into_iter().map(|(k, v)| Ok((k, evaluate_context(v)?))).collect::<Result<_>>()?;
 
             Ok(Value::Mapping(map))
         }
