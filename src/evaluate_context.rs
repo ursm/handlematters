@@ -36,7 +36,8 @@ fn run_script(script: &str) -> Result<String> {
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
-        .spawn()?;
+        .spawn()
+        .with_context(|| "failed to start shell: sh")?;
 
     shell.stdin.as_mut().unwrap().write_all(script.as_bytes())?;
 
