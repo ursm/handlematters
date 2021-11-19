@@ -1,4 +1,7 @@
 --- context ---
-greeting: echo 'hello, world'
-count: |
-  echo -n 'hello, world' | wc --chars
+greeting: echo hello
+
+list: |
+  for v in foo bar baz; do
+    echo "* $v"
+  done

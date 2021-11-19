@@ -4,9 +4,14 @@ Any text before the context or template block is just a comment.
 It will not be output.
 
 --- context ---
-greeting: echo 'hello, world'
-count: |
-  echo -n 'hello, world' | wc --chars
+greeting: echo hello
+
+list: |
+  for v in foo bar baz; do
+    echo "* $v"
+  done
 
 --- template ---
-{{greeting}} (length: {{count}})
+{{greeting}}, world
+
+{{list}}

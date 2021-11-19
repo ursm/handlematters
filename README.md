@@ -15,35 +15,49 @@ Any text before the context or template block is just a comment.
 It will not be output.
 
 --- context ---
-greeting: echo 'hello, world'
-count: |
-  echo -n 'hello, world' | wc --chars
+greeting: echo hello
+
+list: |
+  for v in foo bar baz; do
+    echo "* $v"
+  done
 
 --- template ---
-{{greeting}} (length: {{count}})
+{{greeting}}, world
+
+{{list}}
 ```
 
 Passing this file to handlematters will result in the following output:
 
 ```
 $ handlematters hello.hms
-hello, world (length: 12)
+hello, world
+
+* foo
+* bar
+* baz
 ```
 
 Let's take a closer look.
 
 ```
 --- context ---
-greeting: echo 'hello, world'
-count: |
-  echo -n 'hello, world' | wc --chars
+greeting: echo hello
+
+list: |
+  for v in foo bar baz; do
+    echo "* $v"
+  done
 ```
 
 The `context` block is a YAML document. Each value of the property will be executed as a shell script and the output will be the resulting value.
 
 ```
 --- template ---
-{{greeting}} (length: {{count}})
+{{greeting}}, world
+
+{{list}}
 ```
 
 The `template` block is a Handlebars template. `{{...}}` to output the context value. If you are not familiar with Handlebars syntax, have a look at https://handlebarsjs.com/.

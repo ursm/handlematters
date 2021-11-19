@@ -1,2 +1,4 @@
 --- template ---
-{{greeting}} (length: {{count}})
+{{greeting}}, world
+
+{{list}}
