@@ -1,5 +1,5 @@
 name: cargo
-description:  Run cargo
+description: Run cargo
 
 inputs:
   target:
