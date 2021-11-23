@@ -9,7 +9,7 @@ authors = ["Keita Urashima <ursm@ursm.jp>"]
 license = "MIT"
 
 [dependencies]
-anyhow = "1.0.45"
+anyhow = "1.0.48"
 clap = "3.0.0-beta.5"
 handlebars = "4.1.5"
 indoc = "1.0.3"
@@ -17,7 +17,7 @@ serde_yaml = "0.8.21"
 
 [dev-dependencies]
 assert_cmd = "2.0.2"
-predicates = "2.0.3"
+predicates = "2.1.0"
 tempfile = "3.2.0"
 
 [profile.release]
