@@ -236,7 +236,7 @@ fn invalid_haml() -> Result<()> {
 
     cmd.assert().failure().stderr(indoc! {r#"
         Error: Template error: invalid handlebars syntax.
-            --> Template error in "Unnamed template":2:1
+            --> Template error in "Unnamed":2:1
              |
            0 | {{
              |
