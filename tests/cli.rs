@@ -155,7 +155,7 @@ fn script_killed() -> Result<()> {
         foo
 
         Caused by:
-            process exited unsuccessfully: signal: 15
+            process exited unsuccessfully: signal: 15 (SIGTERM)
     "});
 
     Ok(())
@@ -216,15 +216,14 @@ fn invalid_yaml() -> Result<()> {
         &
 
         Caused by:
-            0: while scanning an anchor or alias, did not find expected alphabetic or numeric character at line 1 column 1
-            1: while scanning an anchor or alias, did not find expected alphabetic or numeric character at line 1 column 1
+            did not find expected alphabetic or numeric character at line 1 column 2, while scanning an anchor
     "});
 
     Ok(())
 }
 
 #[test]
-fn invalid_haml() -> Result<()> {
+fn invalid_hbs() -> Result<()> {
     let mut cmd = Command::cargo_bin("handlematters")?;
 
     cmd.write_stdin(indoc! {"
