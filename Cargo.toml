@@ -15,7 +15,7 @@ serde_yaml = "0.9.4"
 
 [dev-dependencies]
 assert_cmd = "2.0.5"
-predicates = "2.1.0"
+predicates = "2.1.5"
 tempfile = "3.2.0"
 
 [profile.release]
