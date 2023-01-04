@@ -8,10 +8,10 @@ use anyhow::{Context, Result};
 use clap::Parser;
 
 #[derive(Parser)]
-#[clap(version, author, about)]
+#[command(version, author, about)]
 struct Opts {
     /// Input file [default: stdin]
-    #[clap(parse(from_os_str))]
+    #[arg()]
     file: Option<PathBuf>,
 }
 
