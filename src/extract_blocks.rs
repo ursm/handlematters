@@ -31,7 +31,7 @@ pub fn extract_blocks<T: Read>(reader: &mut T) -> Result<BlockRegistry> {
     let mut registry = BlockRegistry::new();
     let mut current_block: Option<String> = None;
 
-    for (i, line) in LinesWithEndings::from(&mut reader).into_iter().enumerate() {
+    for (i, line) in LinesWithEndings::from(&mut reader).enumerate() {
         let line = line?;
 
         if let Some(ref current_block) = current_block {

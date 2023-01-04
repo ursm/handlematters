@@ -25,7 +25,7 @@ fn main() -> Result<()> {
             if path_str == "-" {
                 Box::new(io::stdin())
             } else {
-                Box::new(File::open(path.clone()).with_context(|| format!("failed to open file: {}", path_str))?)
+                Box::new(File::open(path.clone()).with_context(|| format!("failed to open file: {path_str}"))?)
             }
         }
         None => Box::new(io::stdin()),

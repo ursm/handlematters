@@ -59,7 +59,7 @@ fn run_script(script: &str) -> Result<String> {
         }
     })?;
 
-    eprint!("{}", stderr);
+    eprint!("{stderr}");
 
     Ok(stdout)
 }
