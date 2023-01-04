@@ -11,7 +11,7 @@ anyhow = "1.0.48"
 clap = { version = "3.0.0", features = ["derive"] }
 handlebars = "4.1.5"
 indoc = "1.0.8"
-serde_yaml = "0.9.4"
+serde_yaml = "0.9.16"
 
 [dev-dependencies]
 assert_cmd = "2.0.5"
