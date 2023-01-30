@@ -10,7 +10,7 @@ license = "MIT"
 anyhow = "1.0.68"
 clap = { version = "4.0.32", features = ["derive"] }
 handlebars = "4.3.6"
-indoc = "1.0.8"
+indoc = "2.0.0"
 serde_yaml = "0.9.16"
 
 [dev-dependencies]
