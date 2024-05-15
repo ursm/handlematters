@@ -14,7 +14,7 @@ indoc = "2.0.4"
 serde_yaml = "0.9.25"
 
 [dev-dependencies]
-assert_cmd = "2.0.5"
+assert_cmd = "2.0.8"
 predicates = "3.0.4"
 tempfile = "3.4.0"
 
