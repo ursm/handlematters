@@ -3,6 +3,7 @@ name = "handlematters"
 version = "0.2.1"
 edition = "2021"
 description = "Self-contained template system with Handlebars and inline shell scripts"
+homepage = "https://github.com/ursm/handlematters"
 authors = ["Keita Urashima <ursm@ursm.jp>"]
 license = "MIT"
 
