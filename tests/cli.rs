@@ -234,12 +234,12 @@ fn invalid_hbs() -> Result<()> {
     "});
 
     cmd.assert().failure().stderr(indoc! {r#"
-        Error: Template error: invalid handlebars syntax.
+        Error: Template error: invalid handlebars syntax: expected identifier, subexpression, leading_tilde_to_omit_whitespace, or path_inline
             --> Template error in "Unnamed":2:1
              |
            0 | {{
              |
-             = reason: invalid handlebars syntax.
+             = reason: invalid handlebars syntax: expected identifier, subexpression, leading_tilde_to_omit_whitespace, or path_inline
 
     "#});
 
