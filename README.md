@@ -94,6 +94,6 @@ Arguments:
   [FILE]  Input file [default: stdin]
 
 Options:
-  -h, --help     Print help information
-  -V, --version  Print version information
+  -h, --help     Print help
+  -V, --version  Print version
 ```

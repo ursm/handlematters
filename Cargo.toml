@@ -1,6 +1,6 @@
 [package]
 name = "handlematters"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "Self-contained template system with Handlebars and inline shell scripts"
 authors = ["Keita Urashima <ursm@ursm.jp>"]
