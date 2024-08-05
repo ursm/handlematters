@@ -17,7 +17,7 @@ serde_yaml = "0.9.25"
 [dev-dependencies]
 assert_cmd = "2.0.8"
 predicates = "3.0.4"
-tempfile = "3.10.1"
+tempfile = "3.11.0"
 
 [profile.release]
 codegen-units = 1
