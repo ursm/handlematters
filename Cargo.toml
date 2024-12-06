@@ -9,7 +9,7 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0.94"
-clap = { version = "4.5.22", features = ["derive"] }
+clap = { version = "4.5.23", features = ["derive"] }
 handlebars = "6.2.0"
 indoc = "2.0.4"
 serde_yaml = "0.9.25"
