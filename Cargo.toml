@@ -8,7 +8,7 @@ authors = ["Keita Urashima <ursm@ursm.jp>"]
 license = "MIT"
 
 [dependencies]
-anyhow = "1.0.95"
+anyhow = "1.0.98"
 clap = { version = "4.5.36", features = ["derive"] }
 handlebars = "6.3.2"
 indoc = "2.0.6"
